@@ -1,0 +1,4 @@
+interface:
+  display_name: "Image Compression"
+  short_description: "Compress and convert images with magick"
+  default_prompt: "Use $image-compression to compress or convert these images."

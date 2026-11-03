@@ -1,0 +1,4 @@
+interface:
+  display_name: "Batchprompt Device Images"
+  short_description: "Generate phone and tablet marketing images"
+  default_prompt: "Use $batchprompt-device-images to generate phone and tablet images from these input files."

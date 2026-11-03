@@ -1,0 +1,11 @@
+{
+  "name": "batchprompt-device-images-runtime",
+  "private": true,
+  "dependencies": {
+    "commander": "14.0.3",
+    "fast-glob": "3.3.3",
+    "sharp": "0.34.5",
+    "tsx": "4.21.0",
+    "zod": "3.25.76"
+  }
+}
