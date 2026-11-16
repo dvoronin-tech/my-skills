@@ -1,0 +1,5 @@
+interface:
+  display_name: "Setup workflow"
+  short_description: "Configure Linear or local docs"
+policy:
+  allow_implicit_invocation: false

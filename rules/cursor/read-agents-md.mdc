@@ -1,0 +1,26 @@
+---
+description: Read the global AGENTS.md and apply it with project rules and the other Cursor rules
+alwaysApply: true
+---
+
+# Read global AGENTS.md
+
+Cursor already loads every rule in `~/.cursor/rules` and the open project's `.cursor/rules`. It does not load a user-level `AGENTS.md` by itself.
+
+At the start of each task, read and follow `~/.cursor/AGENTS.md`. That file is the global instruction file. Codex and Claude Code load the same bytes from their own filenames.
+
+Apply all of these together:
+
+- `~/.cursor/AGENTS.md`
+- every other rule in `~/.cursor/rules`
+- the project's `AGENTS.md` and `.cursor/rules`
+
+When a project instruction conflicts with the global file, follow the project.
+
+```text
+❌ BAD
+Follow only the project's .cursor/rules and skip ~/.cursor/AGENTS.md.
+
+✅ GOOD
+Read ~/.cursor/AGENTS.md, then apply it together with ~/.cursor/rules and the project's rules. The project wins on conflict.
+```

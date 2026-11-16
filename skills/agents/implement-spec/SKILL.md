@@ -1,18 +1,33 @@
 ---
 name: implement-spec
-description: "Implement a spec and its tickets as one commit on the current branch, then remove temporary branches and worktrees."
+description: Implement a spec by giving each of its tickets its own agent, then squash to one commit.
 disable-model-invocation: true
 ---
 
-You have been provided a spec with tickets describing how to implement it.
+# Implement spec
 
-The issue tracker should have been provided to you. If not, tell the user to run `/setup-matt-pocock-skills`.
+Implement every ticket of one spec as **one new commit on the user's current branch**. Each ready ticket goes to its own agent. `/setup-workflow` chose the store.
 
-The goal is the entire spec implemented as **one new commit on the user's current branch**, with every ticket resolved the way the issue tracker closes work. Preserve the branch's existing history. Temporary branches and worktrees are implementation details; remove them once their work is safely integrated.
+## 0. Resolve the target
 
-The tickets form a **task graph** with blocking relationships. Work the **frontier**: tickets whose blockers have all been integrated.
+Local docs is configured when `docs/agents/issue-tracker.md` exists.
 
-Communicate with subagents primarily through **context pointers** to the spec, tickets, research notes, and commits. Run implementer subagents in the background where possible.
+Linear is configured when the Linear project named after this repo's directory has a document titled `Workflow`. `list_teams`, then `list_projects`, then `list_documents` with that project's id. Read each tool schema before calling. A failed or unauthenticated call means Linear is unavailable.
+
+| What you found | Do |
+| --- | --- |
+| Local file only | Read [local.md](local.md) and follow it. |
+| `Workflow` only | Read [linear.md](linear.md) and follow it. |
+| Both | Ask which store with AskQuestion. Options: Linear, Local docs. Then follow that file. |
+| Neither | Stop. Tell the user to run `/setup-workflow`. |
+
+When the reference is a ticket, stop before the steps below. Name the ticket and the spec the store file found. Ask with AskQuestion whether to implement that spec. Options: Implement the spec, Stop. On Stop, finish with no status change and no edits. On Implement the spec, the steps below use that spec.
+
+When the reference is a spec with no tickets, stop. Tell the user to run `/implement` on it.
+
+Done when the target is one spec that has tickets, or the run has stopped.
+
+The steps below are the work. On Linear, [linear.md](linear.md) sets status at the moments it names. Those writes sit beside the step and do not replace it.
 
 ## Steps
 
@@ -24,12 +39,12 @@ Communicate with subagents primarily through **context pointers** to the spec, t
 
 4. Use **implementer subagents** for ready tickets, each in its own temporary worktree and branch based on the latest integration branch tip. Each implementer:
    - confirms its starting point before editing; recreates an incorrectly based clean temporary worktree rather than discarding work;
-   - uses `tdd` to build the ticket;
+   - uses `tdd` to build the ticket, with the store already chosen;
    - merges the latest integration branch tip into its ticket branch and resolves conflicts before reporting completion.
 
 5. Use a **merger subagent** to merge each completed ticket into the integration branch and run the relevant checks. Once the merge is verified and the ticket branch tip is an ancestor of the integration branch, remove that ticket's worktree and delete its local branch immediately. Preserve any uncommitted work before cleanup. Start newly unblocked tickets as the frontier changes.
 
-6. Once all tickets are integrated, use `code-review` to review the full diff from the starting commit to the integration branch. Have one implementer subagent fix the findings, integrate its changes, and clean up its temporary worktree and branch as in step 5. Complete the required checks for the combined implementation.
+6. Once all tickets are integrated, use `code-review` to review the full diff from the starting commit to the integration branch. The spec source is the parent spec. Have one implementer subagent fix the findings, integrate its changes, and clean up its temporary worktree and branch as in step 5. Complete the required checks for the combined implementation.
 
 7. Apply the reviewed result to the target branch with a **squash merge**, then create one commit describing the whole implementation. Before applying it, confirm the target branch still points to the starting commit and isolate existing local changes so they are neither overwritten nor included. If the branch has advanced, preserve its new commits, reconcile the implementation with that tip, and review and verify the combined result before the squash. Resolve squash conflicts and rerun affected checks before committing. Restore preserved local changes afterward; retain their recovery copy if restoration conflicts. Never rewrite existing target-branch commits to obtain the single new commit.
 

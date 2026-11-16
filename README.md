@@ -1,16 +1,56 @@
 # My skills
 
-My local, edited collection of 42 personal agent skills, including skills from
+Personal agent skills for Cursor and Codex. Engineering skills descend from
 [Matt Pocock's collection](https://github.com/mattpocock/skills).
-The upstream MIT notice is preserved in [LICENSE.mattpocock](LICENSE.mattpocock).
 
-The complete skill folders are included: instructions, references, scripts,
-metadata, and runtime assets. Built-in Codex skills and plugin-managed skills
-are installed through Codex and their plugins separately.
+The installer links skills and rules only for agent hosts whose home is already a directory. It prints each host it finds. When a known home is absent, it prints that the host was skipped.
+
+- `cursor` — `~/.cursor`
+- `codex` — `$CODEX_HOME`, or `~/.codex` when `CODEX_HOME` is unset
+- `claude` — `~/.claude`
+
+`~/.agents` is the shared skill home. The installer creates it when shared skills are installed. Host homes are used only when they already exist.
+
+| Repository path | Installed path | Hosts |
+| --- | --- | --- |
+| `skills/agents/<name>` | `~/.agents/skills/<name>` | Cursor or Codex |
+| `skills/codex/<name>` | `$CODEX_HOME/skills/<name>` (`~/.codex/skills/<name>` by default) | Codex |
+| `rules/AGENTS.md` | `~/.cursor/AGENTS.md` | Cursor |
+| `rules/cursor/*.mdc` | `~/.cursor/rules/<filename>` | Cursor |
+| `rules/AGENTS.md` | `$CODEX_HOME/AGENTS.md` (`~/.codex/AGENTS.md` by default) | Codex |
+| `rules/AGENTS.md` | `~/.claude/CLAUDE.md` | Claude |
+
+`rules/AGENTS.md` is one file. Codex loads `$CODEX_HOME/AGENTS.md`. Claude loads those same bytes from `~/.claude/CLAUDE.md`. Cursor loads `~/.cursor/rules` on its own. `rules/cursor/read-agents-md.mdc` tells Cursor to read `~/.cursor/AGENTS.md` as well.
+
+## Skills
+
+`skills/agents/`:
+
+- `code-review`
+- `domain-modeling`
+- `grill-me` — the interview. `/grill-with-docs` calls it together with `domain-modeling`
+- `grill-with-docs`
+- `handoff`
+- `implement`
+- `implement-spec`
+- `prototype`
+- `retro` — writing rules for Cursor, Codex, and Claude Code are in `retro/writing.md`
+- `setup-workflow`
+- `tdd` — module vocabulary is in `tdd/codebase-design.md`
+- `to-spec`
+- `to-tickets`
+
+`skills/codex/`:
+
+- `image-compression`
+
+`setup-workflow` writes triage roles from `setup-workflow/triage-labels.md`. There is no separate triage skill.
+
+Host rules live in `rules/`.
 
 ## Install
 
-You need Git, Python 3, and SSH access to this GitHub repository.
+You need Git and Python 3.
 
 ```sh
 git clone git@github.com:dvoronin-tech/my-skills.git
@@ -18,54 +58,25 @@ cd my-skills
 python3 install.py
 ```
 
-The installer keeps the original locations:
+By default, each installed skill folder and rule file is a symlink to this checkout. Keep the checkout on disk. Edit skills and rules here, commit, and push to save your changes. Running the installer again keeps links that already point to this checkout.
 
-| Repository folder | Installation folder |
-| --- | --- |
-| `skills/agents/` | `~/.agents/skills/` |
-| `skills/codex/` | `$CODEX_HOME/skills/`, or `~/.codex/skills/` by default |
-
-By default, each installed folder is a symlink to this checkout. Keep the
-checkout on disk. Edit skills here, commit, and push to save your changes.
-Running the installer again keeps links that already point to this checkout.
-Restart Codex if newly installed skills do not appear.
-
-If existing skills would be replaced, the installer stops before making changes.
-To keep those versions in dated backup folders and install this collection:
+If an existing skill or rule would be replaced, the installer stops before making any change. To keep those versions in dated backup folders and install this collection:
 
 ```sh
 python3 install.py --replace
 ```
 
-Backups are stored beside the relevant `skills/` folder, as
-`skills-backup-<date-and-time>/`. They are local and are not pushed to GitHub.
+Skill backups are stored beside the relevant `skills/` folder, as `skills-backup-<date-and-time>/<skill-name>`. Rule backups use that same timestamp. Cursor's `AGENTS.md` and `*.mdc` files go to `~/.cursor/rules-backup-<date-and-time>/`. Codex's `AGENTS.md` goes to `$CODEX_HOME/rules-backup-<date-and-time>/`. Claude's `CLAUDE.md` goes to `~/.claude/rules-backup-<date-and-time>/`. Backups are local and are not pushed to GitHub.
 
-On Windows, use Python 3 with `python install.py --copy` if symlinks are
-unavailable. WSL can use the normal commands above. Copy installations need
-`--copy --replace` again after pulling updates.
+On Windows, use `python install.py --copy` if symlinks are unavailable. WSL can use the normal commands above. `--copy` copies skill folders and rule files. Copy installations need `--copy --replace` again after pulling updates.
 
-## Image tools
+## Image compression
 
-Instruction-only skills need no extra packages. The image skills need additional
-tools on each computer:
+`image-compression` needs Node.js, ImageMagick (`magick`), and `pngquant` on `PATH`.
 
-- `batchprompt-device-images` and `english-device-page-assets`: Node.js 20+,
-  npm, and ImageMagick (`magick`). Install the bundled runtime's locked
-  dependencies from this checkout:
-
-  ```sh
-  npm --prefix skills/codex/batchprompt-device-images/runtime ci
-  ```
-
-- `image-compression`: Node.js, ImageMagick (`magick`), and `pngquant` on `PATH`.
-
-Installed npm packages are excluded from Git so each computer gets the correct
-platform binaries. With `--copy`, prepare the runtime before running the installer,
-or run it again with `--copy --replace` after installing the packages.
-The image generator uses Unix shell commands; on Windows, run it in WSL.
-
-Some skills are specific to a project or agent tool, such as Butlerapp asset
-generation or Claude Code hooks. Their original requirements still apply.
+```sh
+brew install imagemagick pngquant
+```
 
 ## Update another computer
 
@@ -74,6 +85,4 @@ git pull --ff-only
 python3 install.py
 ```
 
-Existing symlinks see edited files immediately. Rerunning the installer also
-links newly added skills. If the image runtime's lockfile changes, run its
-`npm ci` command again. Use `--copy --replace` instead for copy installations.
+Existing symlinks see edited files immediately. Rerunning the installer also links newly added skills and rules. Use `--copy --replace` instead for copy installations.

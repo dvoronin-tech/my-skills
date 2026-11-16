@@ -1,0 +1,26 @@
+---
+description: Check for an existing dev server before starting one, and stop any server you started when finished
+alwaysApply: true
+---
+
+# Dev server terminals
+
+Before starting a dev server, check whether one is already running. Do not open another terminal for it if one exists.
+
+## Check first
+
+1. Read the terminals folder. The first lines of each session file have cwd, the last command, and whether a command is still running.
+2. If a dev server for this project is already running, use that URL. Do not start a second one.
+
+## If you start one
+
+Stop that process when you are done. Do not leave a dev server you started running in the background.
+
+```text
+❌ BAD
+Run `pnpm dev` without looking at open terminals. Leave it running after you finish.
+
+✅ GOOD
+See an existing `pnpm dev` for this project. Use that URL.
+If none is running, start one, then stop it after you finish.
+```

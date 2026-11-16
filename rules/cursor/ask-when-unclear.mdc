@@ -1,0 +1,36 @@
+---
+description: Always ask the user via AskQuestion when anything is unclear before or during work
+alwaysApply: true
+---
+
+# Ask When Unclear
+
+If you need information from the user, **ask immediately**. Do not guess, skip, or wait until the end.
+
+## When to ask
+
+- **Before work**: goal, scope, constraints, or success criteria are missing or ambiguous
+- **During work**: a new choice appears (API, name, behavior, trade-off, missing file, conflicting requirement)
+- **Blocked**: you cannot continue correctly without a user decision
+
+Do **not** ask if the answer is already in the conversation, open files, or project rules.
+
+## How to ask
+
+Use the built-in **AskQuestion** tool (not a long prose question at the end of a message).
+
+- Ask as soon as the question appears — before, during, or after a step
+- Put each distinct decision in its own question
+- Prefer concrete options; the user can still pick Other
+- If several questions are independent, send them in **one** AskQuestion call
+- After the user answers, continue with that answer — do not re-ask
+
+```text
+❌ BAD
+Implement the endpoint, pick JWT vs session yourself, then mention the doubt at the end.
+
+✅ GOOD
+Call AskQuestion first: "Which auth should this endpoint use?"
+Options: JWT (recommended) | Session cookie | Other
+Then implement with the chosen option.
+```

@@ -1,4 +1,0 @@
-interface:
-  display_name: "English Device Page Assets"
-  short_description: "Generate English device assets and update imports"
-  default_prompt: "Use $english-device-page-assets to generate English phone and tablet assets from output JSON files and update their page imports."

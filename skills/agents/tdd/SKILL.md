@@ -1,13 +1,32 @@
 ---
 name: tdd
-description: Test-driven development. Use when the user wants to build features or fix bugs test-first, mentions "red-green-refactor", or wants integration tests.
+description: Test-driven development. Use when the user wants to build features or fix bugs test-first, mentions "red-green-refactor", or wants integration tests. Test names use the project glossary from the configured store, local docs or Linear.
 ---
 
 # Test-Driven Development
 
 TDD is the red → green loop. This skill is the reference that makes that loop produce tests worth keeping: what a good test is, where tests go, the anti-patterns, and the rules of the loop. Every section applies on every cycle: consult them before and during the loop, not after.
 
-When exploring the codebase, read `GLOSSARY.md` (if it exists) so test names and interface vocabulary match the project's domain language, and respect ADRs in the area you're touching.
+## Domain language
+
+Test names use the glossary's terms. Name a decision that conflicts with the test before writing it.
+
+When the caller already chose Linear or Local docs this run, use that store. Otherwise:
+
+Local docs is configured when `docs/agents/issue-tracker.md` exists.
+
+Linear is configured when the Linear project named after this repo's directory has a document titled `Workflow`. `list_teams`, then `list_projects`, then `list_documents` with that project's id. Read each tool schema before calling. A failed or unauthenticated call means Linear is unavailable.
+
+| What you found | Do |
+| --- | --- |
+| Local file only | Read [local.md](local.md) and follow it. |
+| `Workflow` only | Read [linear.md](linear.md) and follow it. |
+| Both | Ask which store with AskQuestion. Options: Linear, Local docs. Then follow that file. |
+| Neither | Use the words already in the code. |
+
+Read the store file before the first test. A missing glossary is fine: continue.
+
+Done when the terms in the test names are the glossary's, or the glossary is missing.
 
 ## What a good test is
 
@@ -23,7 +42,7 @@ A **seam** is the public boundary you test at: the interface where you observe b
 
 Ask: "What's the public interface, and which seams should we test?" Give each proposed seam a one-line note on what it catches and what it misses.
 
-When the shape of that interface is itself in question (how deep the module is, where the seam belongs, what the interface should expose), call the Skill tool with "codebase-design" for the vocabulary. It is the shared source of the module, interface, depth, seam, adapter, leverage and locality terms, and it is a reference to consult, not a session to run.
+When the shape of that interface is itself in question (how deep the module is, where the seam belongs, what the interface should expose), read [codebase-design.md](codebase-design.md). It is the vocabulary for module, interface, depth, seam, adapter, leverage, and locality. Consult it. Run a design session from that file only when the user asks to explore the interface.
 
 ## Anti-patterns
 

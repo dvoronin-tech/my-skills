@@ -1,22 +1,47 @@
 ---
 name: to-spec
-description: "Turn the current conversation into a spec and publish it to the project issue tracker: no interview, just synthesis of what you've already discussed."
+description: Turn the current conversation into a spec and publish it to the configured store.
 disable-model-invocation: true
 ---
 
-This skill takes the current conversation context and codebase understanding and produces a spec. Do NOT interview the user; just synthesize what you already know.
+# To spec
 
-The issue tracker and triage label vocabulary should have been provided to you. If not, tell the user to run `/setup-matt-pocock-skills`.
+Synthesize a spec from the current conversation and the codebase, then publish it. The store was chosen by `/setup-workflow`.
 
-## Process
+The only question in a normal run is whether the test seams match. Ask anything else only when both stores are configured, or when a spec with the same name already exists.
 
-1. Explore the repo to understand the current state of the codebase, if you haven't already. Use the project's domain glossary vocabulary throughout the spec, and respect any ADRs in the area you're touching.
+## 1. Resolve the store
 
-2. Sketch out the seams at which you're going to test the feature. Existing seams should be preferred to new ones. Use the highest seam possible. If new seams are needed, propose them at the highest point you can. The fewer seams across the codebase, the better - the ideal number is one.
+Local docs is configured when `docs/agents/issue-tracker.md` exists.
 
-Check with the user that these seams match their expectations.
+Linear is configured when the Linear project named after this repo's directory has a document titled `Workflow`. `list_teams`, then `list_projects`, then `list_documents` with that project's id. Read each tool schema before calling. A failed or unauthenticated call means Linear is unavailable.
 
-3. Write the spec using the template below, then publish it to the project issue tracker. Apply the `ready-for-agent` triage label - no need for additional triage.
+| What you found | Do |
+| --- | --- |
+| Local file only | Read [local.md](local.md) and follow it for domain docs and publishing. |
+| `Workflow` only | Read [linear.md](linear.md) and follow it. |
+| Both | Ask which store with AskQuestion. Options: Linear, Local docs. Then follow that file. |
+| Neither | Stop. Tell the user to run `/setup-workflow`. |
+
+Done when one store is chosen.
+
+## 2. Explore
+
+Read the domain docs named by the store file, then explore the repo around the feature. Use the glossary's terms in the spec. When a decision conflicts with the spec, say so in the spec.
+
+Done when you can name the current behavior this spec changes.
+
+## 3. Seams
+
+Sketch the seams where the feature will be tested. Prefer a seam that already exists. Use the highest seam that can see the behavior. One seam is the goal.
+
+Ask the user with AskQuestion whether these seams match. Options: yes, adjust. On adjust, take the correction and restate the seams.
+
+Done when the user has accepted the seams.
+
+## 4. Write
+
+Fill the template from the conversation, the codebase, and the accepted seams. Title the spec from the feature the conversation is about.
 
 <spec-template>
 
@@ -63,6 +88,7 @@ A list of testing decisions that were made. Include:
 - A description of what makes a good test (only test external behavior, not implementation details)
 - Which modules will be tested
 - Prior art for the tests (i.e. similar types of tests in the codebase)
+- The accepted test seams
 
 ## Out of Scope
 
@@ -73,3 +99,13 @@ A description of the things that are out of scope for this spec.
 Any further notes about the feature.
 
 </spec-template>
+
+Done when every section is filled.
+
+## 5. Publish
+
+Follow the store file from step 1. Mark the spec `ready-for-agent`.
+
+When a spec with the same slug or title already exists, ask with AskQuestion before replacing it. Options: replace, keep the existing one.
+
+Done when you have told the user the spec's path or Linear URL.
