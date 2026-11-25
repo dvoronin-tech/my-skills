@@ -1,0 +1,7 @@
+# Local docs
+
+Read the tracker contract in `docs/agents/issue-tracker.md` and follow [to-spec's local domain and publish rules](../to-spec/local.md). Resolve ticket numbers within an identified feature. Ask for a path when the number matches more than one ticket.
+
+Under the standard local Markdown contract, the spec is `.scratch/<feature-slug>/spec.md` and its tickets are the files under that feature's `issues/` directory. Choose a destination that contains only tickets included in the plan. Keep tickets already in the destination in place. If tickets must move, show the old and new paths in the proposal. Check for collisions and existing references that a move could break. Include needed reference updates in the plan before moving files. Preserve ticket numbers where they fit and use the final numbers or paths in blocker references.
+
+Write the spec and move the approved existing files into its `issues/` directory, preserving their contents except for agreed changes. Write approved additions using [to-tickets' local publish rules](../to-tickets/local.md). Update each affected `**Blocked by:**` line using the tracker convention. Use unambiguous links or paths for blockers outside the feature. Verify that the final `issues/` directory contains the intended tickets, resolves their blocker references, and has no duplicate copies of moved tickets. Report the spec and ticket paths, including any old-to-new paths.

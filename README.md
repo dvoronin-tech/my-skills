@@ -37,6 +37,7 @@ The installer links skills and rules only for agent hosts whose home is already 
 - `retro` — writing rules for Cursor, Codex, and Claude Code are in `retro/writing.md`
 - `setup-workflow`
 - `tdd` — module vocabulary is in `tdd/codebase-design.md`
+- `tickets-to-spec`
 - `to-spec`
 - `to-tickets`
 

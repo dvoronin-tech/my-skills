@@ -1,0 +1,3 @@
+interface:
+  display_name: "Tickets to Spec"
+  short_description: "Build a shared spec from existing tickets"
