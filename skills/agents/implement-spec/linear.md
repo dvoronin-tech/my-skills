@@ -27,7 +27,6 @@ Use the Status table in `Workflow`. `save_issue` with `id` and `state`.
 | --- | --- | --- |
 | Step 1, spec and tickets are read | Spec | Start work |
 | Step 4, an implementer is about to start a ticket | That ticket | Start work |
-| Step 5, that ticket's merge is verified | That ticket | Resolve |
-| Step 9 | Spec, and any ticket still short of Resolve | Resolve |
+| Step 9, after verifying the final commit and creating or updating any required PR | Spec and all its tickets | Ready for review |
 
 A run that stops early leaves each issue at the last status set above.
